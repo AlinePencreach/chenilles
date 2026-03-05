@@ -1,6 +1,6 @@
 export type NestType = 'nid' | 'procession';
 
-export type NestStatus = 'signale' | 'mairie' | 'traite';
+export type NestStatus = 'signale' | 'mairie' | 'traite' | 'rejete';
 
 export type Nest = {
   id: string;

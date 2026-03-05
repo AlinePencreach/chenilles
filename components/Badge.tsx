@@ -6,6 +6,7 @@ const STATUS_CONFIG: Record<NestStatus, { label: string; bg: string; text: strin
   signale:  { label: 'Signalé',          bg: '#FEE2E2', text: '#C0402A' },
   mairie:   { label: '🏛️ Mairie',        bg: '#FEF3C7', text: '#92400E' },
   traite:   { label: '✅ Traité',         bg: '#D1FAE5', text: '#065F46' },
+  rejete:   { label: '✗ Rejeté',         bg: '#F3F4F6', text: '#6B7280' },
 };
 
 type Props = { status: NestStatus };

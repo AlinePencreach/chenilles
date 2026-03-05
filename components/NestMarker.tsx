@@ -11,11 +11,12 @@ export function NestMarker({ nest }: Props) {
   const isRecent = Date.now() - new Date(nest.created_at).getTime() < SEVEN_DAYS;
 
   const bg =
+    nest.status === 'rejete' ? '#9CA3AF' :
     nest.status === 'traite' ? '#375530' :
     nest.status === 'mairie' ? '#C98520' :
     isRecent                 ? '#C0402A' : '#C98520';
 
-  const opacity = nest.status === 'traite' ? 0.5 : 1;
+  const opacity = nest.status === 'traite' || nest.status === 'rejete' ? 0.45 : 1;
 
   return (
     <View style={[styles.drop, { backgroundColor: bg, opacity }]}>

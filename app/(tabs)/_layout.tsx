@@ -63,6 +63,13 @@ export default function TabsLayout() {
           tabBarBadge: undefined,
         }}
       />
+      <Tabs.Screen
+        name="moderation"
+        options={{
+          title: 'Mairie',
+          tabBarIcon: ({ focused }) => <TabIcon emoji="🏛️" focused={focused} />,
+        }}
+      />
     </Tabs>
   );
 }

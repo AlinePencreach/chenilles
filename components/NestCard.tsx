@@ -23,6 +23,7 @@ export function NestCard({ nest, userLocation, onPress }: Props) {
 
   const isRecent = Date.now() - new Date(nest.created_at).getTime() < SEVEN_DAYS;
   const dotColor =
+    nest.status === 'rejete' ? '#9CA3AF' :
     nest.status === 'traite' ? colors.moss :
     nest.status === 'mairie' ? '#C98520' :
     isRecent                 ? colors.red : '#C98520';
