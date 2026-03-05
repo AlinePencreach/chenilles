@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,6 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
 import { colors } from '@/constants/colors';
 import { typography } from '@/constants/typography';
 import { Badge } from '@/components/Badge';
@@ -16,8 +15,8 @@ import { supabase } from '@/lib/supabase';
 import { useNests } from '@/hooks/useNests';
 import type { Nest, NestStatus } from '@/lib/types';
 
-const PIN_KEY = 'chenilles_moderation_pin';
-const DEFAULT_PIN = '1234';
+// Code PIN de la mairie — à changer ici pour le déploiement
+const MAIRIE_PIN = '1234';
 const EMOJI: Record<string, string> = { nid: '🫧', procession: '🐛' };
 
 type Filter = 'signale' | 'mairie' | 'traite' | 'rejete';
@@ -53,12 +52,6 @@ export default function ModerationScreen() {
 function PinScreen({ onSuccess }: { onSuccess: () => void }) {
   const [digits, setDigits] = useState('');
   const [error, setError] = useState(false);
-  const [isFirst, setIsFirst] = useState(false);
-
-  // Vérifie si un PIN a déjà été défini
-  useState(() => {
-    SecureStore.getItemAsync(PIN_KEY).then((v) => { if (!v) setIsFirst(true); });
-  });
 
   function press(d: string) {
     if (digits.length >= 4) return;
@@ -73,9 +66,8 @@ function PinScreen({ onSuccess }: { onSuccess: () => void }) {
     setError(false);
   }
 
-  async function validate(code: string) {
-    const stored = (await SecureStore.getItemAsync(PIN_KEY)) ?? DEFAULT_PIN;
-    if (code === stored) {
+  function validate(code: string) {
+    if (code === MAIRIE_PIN) {
       onSuccess();
     } else {
       setError(true);
@@ -87,10 +79,6 @@ function PinScreen({ onSuccess }: { onSuccess: () => void }) {
     <View style={pinStyles.container}>
       <Text style={pinStyles.title}>🏛️ Accès Mairie</Text>
       <Text style={pinStyles.subtitle}>Code confidentiel</Text>
-
-      {isFirst && (
-        <Text style={pinStyles.hint}>Code par défaut : {DEFAULT_PIN}</Text>
-      )}
 
       {/* Dots */}
       <View style={pinStyles.dots}>
