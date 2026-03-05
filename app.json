@@ -1,0 +1,66 @@
+{
+  "expo": {
+    "name": "Chenilles à Vernègues",
+    "slug": "chenilles",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "chenilles",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F6F1E4"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "fr.vernegues.chenilles",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Utilisé pour centrer la carte sur votre position et calculer les distances aux nids.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Utilisé en mode balade pour vous alerter si vous approchez d'un nid."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F6F1E4"
+      },
+      "package": "fr.vernegues.chenilles",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Utilisé en mode balade pour vous alerter si vous approchez d'un nid.",
+          "locationWhenInUsePermission": "Utilisé pour centrer la carte sur votre position."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#375530"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "YOUR_EAS_PROJECT_ID"
+      }
+    }
+  }
+}
