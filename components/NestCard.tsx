@@ -5,6 +5,9 @@ import { Badge } from './Badge';
 import { haversine, formatDistance } from '@/lib/haversine';
 import type { Nest, Coords } from '@/lib/types';
 
+const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+const EMOJI: Record<string, string> = { nid: '🫧', procession: '🐛' };
+
 type Props = {
   nest: Nest;
   userLocation: Coords | null;
@@ -16,46 +19,56 @@ export function NestCard({ nest, userLocation, onPress }: Props) {
     ? formatDistance(haversine(userLocation.latitude, userLocation.longitude, nest.latitude, nest.longitude))
     : null;
 
-  const date = new Date(nest.created_at).toLocaleDateString('fr-FR', {
-    day: 'numeric',
-    month: 'short',
-  });
+  const date = new Date(nest.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
 
-  const emoji = nest.type === 'nid' ? '🫧' : '🐛';
+  const isRecent = Date.now() - new Date(nest.created_at).getTime() < SEVEN_DAYS;
+  const dotColor =
+    nest.status === 'traite' ? colors.moss :
+    nest.status === 'mairie' ? '#C98520' :
+    isRecent                 ? colors.red : '#C98520';
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
-      <View style={styles.header}>
-        <Text style={styles.emoji}>{emoji}</Text>
-        <View style={styles.info}>
-          <Text style={styles.lieu} numberOfLines={1}>{nest.lieu}</Text>
-          <View style={styles.meta}>
-            {distance && <Text style={styles.metaText}>{distance}</Text>}
-            <Text style={styles.metaText}>{date}</Text>
-          </View>
+      <View style={[styles.dot, { backgroundColor: dotColor }]} />
+      <View style={styles.body}>
+        <Text style={styles.lieu} numberOfLines={1}>
+          {EMOJI[nest.type] ?? '⚠️'} {nest.lieu || 'Position sur carte'}
+        </Text>
+        {nest.description ? (
+          <Text style={styles.desc} numberOfLines={2}>{nest.description}</Text>
+        ) : null}
+        <View style={styles.metaRow}>
+          <Text style={styles.date}>{date}</Text>
+          {distance ? <Text style={styles.dist}>📍 {distance}</Text> : null}
         </View>
-        <Badge status={nest.status} />
+        {nest.status !== 'signale' && <Badge status={nest.status} />}
       </View>
-      {nest.description && (
-        <Text style={styles.description} numberOfLines={2}>{nest.description}</Text>
-      )}
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: colors.bark + '15',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    paddingVertical: 13,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(26,14,6,.07)',
+    backgroundColor: colors.cream,
   },
-  header: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  emoji: { fontSize: 24 },
-  info: { flex: 1 },
-  lieu: { ...typography.body, color: colors.bark, fontFamily: 'Fraunces-SemiBold' },
-  meta: { flexDirection: 'row', gap: 8, marginTop: 2 },
-  metaText: { ...typography.mono, color: colors.bark + '60' },
-  description: { ...typography.body, color: colors.bark + '80', marginTop: 8 },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginTop: 5,
+    flexShrink: 0,
+  },
+  body: { flex: 1, minWidth: 0 },
+  lieu: { ...typography.body, fontFamily: 'Fraunces-SemiBold', color: colors.bark, marginBottom: 2 },
+  desc: { ...typography.body, fontSize: 12, color: '#6b5740', fontStyle: 'italic', lineHeight: 16, marginBottom: 4 },
+  metaRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  date: { fontFamily: 'DMMono-Regular', fontSize: 10, color: '#9a7e66' },
+  dist: { fontFamily: 'DMMono-Regular', fontSize: 10, color: colors.moss, fontWeight: '500' },
 });

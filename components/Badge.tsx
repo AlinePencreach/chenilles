@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '@/constants/colors';
 import type { NestStatus } from '@/lib/types';
 
+// Colors matching the HTML prototype exactly
 const STATUS_CONFIG: Record<NestStatus, { label: string; bg: string; text: string }> = {
-  signale: { label: 'Signalé', bg: colors.red + '20', text: colors.red },
-  signale_mairie: { label: '🏛️ Mairie prévenue', bg: colors.amber + '20', text: colors.amber },
-  traite: { label: '✅ Traité', bg: colors.green + '20', text: colors.green },
+  signale:  { label: 'Signalé',          bg: '#FEE2E2', text: '#C0402A' },
+  mairie:   { label: '🏛️ Mairie',        bg: '#FEF3C7', text: '#92400E' },
+  traite:   { label: '✅ Traité',         bg: '#D1FAE5', text: '#065F46' },
 };
 
 type Props = { status: NestStatus };
@@ -23,11 +23,12 @@ const styles = StyleSheet.create({
   badge: {
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 6,
+    borderRadius: 20,
     alignSelf: 'flex-start',
   },
   label: {
     fontFamily: 'DMMono-Regular',
-    fontSize: 11,
+    fontSize: 10,
+    fontWeight: '600',
   },
 });

@@ -8,10 +8,10 @@ import { NestMarker } from '@/components/NestMarker';
 import { colors } from '@/constants/colors';
 import type { Nest } from '@/lib/types';
 
-// Vernègues, Bouches-du-Rhône
+// Vernègues, Bouches-du-Rhône (13116)
 const VERNEGUES: Region = {
-  latitude: 43.6478,
-  longitude: 5.2394,
+  latitude: 43.5275,
+  longitude: 5.3236,
   latitudeDelta: 0.04,
   longitudeDelta: 0.04,
 };

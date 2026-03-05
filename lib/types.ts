@@ -1,6 +1,6 @@
 export type NestType = 'nid' | 'procession';
 
-export type NestStatus = 'signale' | 'signale_mairie' | 'traite';
+export type NestStatus = 'signale' | 'mairie' | 'traite';
 
 export type Nest = {
   id: string;
@@ -13,6 +13,16 @@ export type Nest = {
   device_id: string;
   created_at: string;
   updated_at: string;
+};
+
+export type Article = {
+  id: string;
+  tag: 'saison' | 'feature' | 'info' | 'communaute';
+  tag_label: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  created_at: string;
 };
 
 export type Coords = {
