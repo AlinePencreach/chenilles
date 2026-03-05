@@ -69,11 +69,11 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.nests;
 -- ============================================================
 -- DONNÉES DE TEST (à supprimer en production)
 -- ============================================================
--- Coordonnées Vernègues (13116) : 43.6478 N, 5.2394 E
+-- Coordonnées Vernègues (13116) : 43.6863 N, 5.1713 E (Plus Code M5PC+64)
 INSERT INTO public.nests (type, lieu, description, latitude, longitude, status, device_id) VALUES
-  ('nid',       'Chemin des Oliviers, pin parasol au bord du chemin', 'Nid visible à environ 4m de hauteur, côté sud.', 43.6501, 5.2410, 'signale', 'seed-device-001'),
-  ('procession','Route de Lambesc, après le virage du moulin',         NULL,                                              43.6455, 5.2370, 'mairie',  'seed-device-002'),
-  ('nid',       'Sentier du Gaï, près de la source',                  'Petit nid récent, arbre isolé.',                  43.6490, 5.2450, 'traite',  'seed-device-003');
+  ('nid',       'Chemin des Oliviers, pin parasol au bord du chemin', 'Nid visible à environ 4m de hauteur, côté sud.', 43.6880, 5.1730, 'signale', 'seed-device-001'),
+  ('procession','Route de Lambesc, après le virage du moulin',         NULL,                                              43.6840, 5.1690, 'mairie',  'seed-device-002'),
+  ('nid',       'Sentier du Gaï, près de la source',                  'Petit nid récent, arbre isolé.',                  43.6870, 5.1750, 'traite',  'seed-device-003');
 
 INSERT INTO public.articles (tag, tag_label, title, excerpt, body) VALUES
   (
