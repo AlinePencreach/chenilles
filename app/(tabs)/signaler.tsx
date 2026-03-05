@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,8 +9,10 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import MapView, { Marker, MapPressEvent } from 'react-native-maps';
+import * as Location from 'expo-location';
 import { colors } from '@/constants/colors';
 import { typography } from '@/constants/typography';
 import { Button } from '@/components/Button';
@@ -20,8 +22,8 @@ import { getDeviceId } from '@/lib/deviceId';
 type NestType = 'nid' | 'procession';
 
 const VERNEGUES = {
-  latitude: 43.6478,
-  longitude: 5.2394,
+  latitude: 43.6863,
+  longitude: 5.1713,
   latitudeDelta: 0.04,
   longitudeDelta: 0.04,
 };
@@ -32,9 +34,30 @@ export default function SignalerScreen() {
   const [description, setDescription] = useState('');
   const [coords, setCoords] = useState<{ latitude: number; longitude: number } | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [locating, setLocating] = useState(false);
+  const mapRef = useRef<MapView>(null);
 
   function handleMapPress(e: MapPressEvent) {
     setCoords(e.nativeEvent.coordinate);
+  }
+
+  async function handleUseGPS() {
+    setLocating(true);
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission refusée', 'Activez la localisation dans les paramètres.');
+        return;
+      }
+      const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+      const c = { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
+      setCoords(c);
+      mapRef.current?.animateToRegion({ ...c, latitudeDelta: 0.01, longitudeDelta: 0.01 }, 400);
+    } catch {
+      Alert.alert('Erreur', 'Impossible de récupérer votre position.');
+    } finally {
+      setLocating(false);
+    }
   }
 
   async function handleSubmit() {
@@ -129,9 +152,18 @@ export default function SignalerScreen() {
 
         {/* Carte */}
         <Text style={styles.label}>Position sur la carte *</Text>
-        <Text style={styles.hint}>Tapez sur la carte pour placer le nid</Text>
+        <View style={styles.hintRow}>
+          <Text style={styles.hint}>Tapez sur la carte pour placer le nid</Text>
+          <TouchableOpacity style={styles.gpsBtn} onPress={handleUseGPS} disabled={locating}>
+            {locating
+              ? <ActivityIndicator size="small" color={colors.moss} />
+              : <Text style={styles.gpsBtnText}>📍 Ma position</Text>
+            }
+          </TouchableOpacity>
+        </View>
         <View style={styles.mapContainer}>
           <MapView
+            ref={mapRef}
             style={styles.map}
             initialRegion={VERNEGUES}
             onPress={handleMapPress}
@@ -167,12 +199,22 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     marginTop: 16,
   },
+  hintRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 },
   hint: {
     fontFamily: 'DMMono-Regular',
     fontSize: 11,
     color: colors.bark + '80',
-    marginBottom: 8,
   },
+  gpsBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderWidth: 1,
+    borderColor: colors.moss,
+    borderRadius: 6,
+    minWidth: 40,
+    alignItems: 'center',
+  },
+  gpsBtnText: { fontFamily: 'DMMono-Regular', fontSize: 11, color: colors.moss },
   typeRow: { flexDirection: 'row', gap: 10 },
   typeBtn: {
     flex: 1,
