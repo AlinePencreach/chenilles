@@ -157,10 +157,6 @@ La chenille processionnaire du pin et du chêne est classée nuisible à la sant
 
 ---
 
-## Contact mairie de Vernègues
 
-📞 04 90 59 30 01
-
----
 
 Projet open source — contributions bienvenues si tu es habitant de Vernègues ou des communes voisines.
